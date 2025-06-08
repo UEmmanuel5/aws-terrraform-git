@@ -32,3 +32,15 @@ resource "aws_subnet" "main_subnet-3" {
     Name = "main_subnet-3"
   }
 }
+
+
+resource "aws_subnet" "main_subnet-4" {
+  vpc_id     = aws_vpc.main-01.id
+  cidr_block = "192.168.10.176/28"
+  availability_zone = "ap-southeast-1c"
+  map_public_ip_on_launch = true
+
+  tags = {
+    Name = "main_subnet-4"
+  }
+}
