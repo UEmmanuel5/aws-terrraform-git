@@ -13,17 +13,31 @@ resource "aws_instance" "web" {
 #               sudo apt install nginx -y
 #               sudo systemctl start nginx
 #               EOF
+# user_data = <<-EOF
+#             #!/bin/bash
+#             sudo apt update -y
+#             sudo apt install nginx unzip wget -y
+#             cd /var/www/html
+#             sudo rm -rf *
+#             wget https://github.com/UEmmanuel5/aws-terrraform-git/archive/refs/heads/main.zip
+#             unzip main.zip
+#             cp -r aws-terrraform-git-main/website/* /var/www/html/
+#             sudo systemctl restart nginx
+#             EOF
 user_data = <<-EOF
             #!/bin/bash
             sudo apt update -y
             sudo apt install nginx unzip wget -y
-            cd /var/www/html
-            sudo rm -rf *
-            wget https://github.com/UEmmanuel5/aws-terrraform-git/archive/refs/heads/main.zip
-            unzip main.zip
+
+            cd /tmp
+            wget https://github.com/UEmmanuel5/aws-terrraform-git/archive/refs/heads/main.zip -O site.zip
+
+            unzip site.zip
             cp -r aws-terrraform-git-main/website/* /var/www/html/
+
             sudo systemctl restart nginx
             EOF
+
 
   tags = {
     Name = "web-server"
