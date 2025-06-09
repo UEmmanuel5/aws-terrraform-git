@@ -26,13 +26,11 @@ resource "aws_instance" "web" {
 #             EOF
   user_data = <<-EOF
               #!/bin/bash
-              sudo apt update -y
-              sudo apt install nginx -y
-              rm -f /var/www/html/index.nginx-debian.html
+              apt update -y
+              apt install nginx unzip wget -y
 
-              # Add custom page
-              echo "<h1>Hello from Terraform 🚀</h1>" > /var/www/html/index.html
-              sudo systemctl restart nginx
+              # Download your zipped website
+              wget https://github.com/UEmmanuel5/aws-terrraform-git/archive/refs/heads/main.zip -O /tmp/main.zip
               EOF
 
 
