@@ -48,21 +48,21 @@ jobs:
         env:
           TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_app_terraform_io }}
 
-      - name: Copy website contents to EC2 (not the folder)
+      - name: Copy website files to EC2
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ env.EC2_PUBLIC_IP }}
           username: ubuntu
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: "website/*"
-          target: "/tmp/"
+          source: "website/."   # ✅ Only contents of 'website/' will be copied
+          target: "/tmp/website/"
         env:
           TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_app_terraform_io }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ap-southeast-1
 
-      - name: Move website content into /var/www/html
+      - name: Move files into Nginx directory on EC2
         uses: appleboy/ssh-action@master
         with:
           host: ${{ env.EC2_PUBLIC_IP }}
@@ -70,7 +70,7 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
             sudo rm -rf /var/www/html/*
-            sudo cp -r /tmp/* /var/www/html/
+            sudo cp -r /tmp/website/* /var/www/html/
             sudo systemctl restart nginx
         env:
           TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_app_terraform_io }}
