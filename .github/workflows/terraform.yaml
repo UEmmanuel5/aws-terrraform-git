@@ -27,26 +27,18 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
-        env:
-          TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_app_terraform_io }}
 
       - name: Terraform Plan
         run: terraform plan
-        env:
-          TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_app_terraform_io }}
 
       - name: Terraform Apply
         run: terraform apply -auto-approve
-        env:
-          TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_app_terraform_io }}
 
       - name: Get EC2 Public IP
         id: get_ip
         run: |
           IP=$(terraform output -raw ec2_public_ip)
           echo "EC2_PUBLIC_IP=$IP" >> $GITHUB_ENV
-        env:
-            TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_app_terraform_io }}
 
       - name: Copy website files to EC2
         uses: appleboy/scp-action@v0.1.7
@@ -54,7 +46,7 @@ jobs:
           host: ${{ env.EC2_PUBLIC_IP }}
           username: ubuntu
           key: ${{ secrets.EC2_PRIVATE_KEY }}
-          source: "./terraform/website/*"
+          source: "website/"
           target: "/tmp/website/"
 
       - name: Move files into Nginx directory on EC2
@@ -67,7 +59,6 @@ jobs:
             sudo rm -rf /var/www/html/*
             sudo cp -r /tmp/website/* /var/www/html/
             sudo systemctl restart nginx
-
 
 
 
