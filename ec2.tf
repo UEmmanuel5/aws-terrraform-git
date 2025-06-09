@@ -28,10 +28,10 @@ resource "aws_instance" "web" {
               #!/bin/bash
               sudo apt update -y
               sudo apt install nginx -y
-              sudo systemctl start nginx
-              cd /var/www/html
-              sudo rm -rf *
-              echo "<h1>Page cleared and replaced</h1>" > index.html
+              rm -f /var/www/html/index.nginx-debian.html
+
+              # Add custom page
+              echo "<h1>Hello from Terraform 🚀</h1>" > /var/www/html/index.html
               sudo systemctl restart nginx
               EOF
 
