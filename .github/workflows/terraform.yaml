@@ -70,6 +70,7 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script: |
             sudo rm -rf /var/www/html/*
+            sudo rm -rf /var/www/html/.* 2>/dev/null || true
             sudo cp -r /tmp/website/* /var/www/html/
             sudo systemctl restart nginx
         env:
