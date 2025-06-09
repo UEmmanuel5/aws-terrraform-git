@@ -1,4 +1,4 @@
-resource "aws_instance" "web" {
+resource "aws_instance" "web-server-001" {
   ami                         = "ami-069cb3204f7a90763"
   instance_type               = "t2.micro"
   subnet_id                   = aws_subnet.main_subnet-1.id
@@ -15,6 +15,6 @@ resource "aws_instance" "web" {
 
 
   tags = {
-    Name = "web-server"
+    Name = "web-server-001"
   }
 }
